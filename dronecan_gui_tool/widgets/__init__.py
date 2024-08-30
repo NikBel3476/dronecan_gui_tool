@@ -18,6 +18,62 @@ from logging import getLogger
 import qtawesome
 from functools import partial
 
+# for tests
+# import datetime
+# class DataMock:
+#     def __init__(self):
+#         pass
+
+#     def __len__(self):
+#         return 0
+
+#     def __getitem__(self, item):
+#         return [0]
+
+# class ItemOneMock:
+#     def __init__(self):
+#         self.canfd = False
+#         self.extended = True
+#         self.ts_real = 1
+#         self.id = 1
+#         self.data = DataMock()
+
+# class ItemMock:
+#     def __init__(self):
+#         self.transfer = TransferMock()
+#         self.message = MessageMock()
+
+#     def __getitem__(self, item):
+#         match item:
+#             case 0: return "test"
+#             case 1: return ItemOneMock()
+
+# class TransferMock:
+#     def __init__(self):
+#         self.source_node_id = 1
+#         self.ts_real = datetime.datetime.now().timestamp()
+
+# class MessageMock:
+#     def __init__(self):
+#         self.level = LevelMock()
+#         self.source = 'source'
+#         self.text = 'text'
+
+# class TypeMock:
+#     response_constants = {}
+#     response_fields = { "value": 1 }
+
+# class LevelMock:
+#     DEBUG = 1,
+#     INFO = 2,
+#     WARNING = 3,
+#     ERROR = 4
+
+#     def __init__(self):
+#         self._type = TypeMock()
+#         self._mode = 'response'
+#         self.value = 3
+
 
 logger = getLogger(__name__)
 
@@ -547,11 +603,21 @@ class RealtimeLogWidget(QWidget):
                         item = self._queue.get_nowait()
                     except queue.Empty:
                         break
+                    # item = ItemMock()
 
                     row = self._table.rowCount()
                     self._table.insertRow(row)
                     self._table.set_row(row, item)
                     do_scroll = True
+                    if row >= 500:
+                        rows = []
+                        for i in range(row):
+                            rows.append(self._table.get_row_as_string(i) + '\n')
+                        with open("log.txt", 'a+') as log_file:
+                            log_file.writelines(rows)
+                            log_file.flush()
+                        self._table.clear()
+                    # break
 
             self._table.setUpdatesEnabled(True)
 
