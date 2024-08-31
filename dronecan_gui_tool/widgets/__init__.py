@@ -11,7 +11,7 @@ import re
 import pkg_resources
 import queue
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView, QApplication, QWidget, \
-    QComboBox, QCompleter, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox
+    QComboBox, QCompleter, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox, QSpinBox
 from PyQt5.QtCore import Qt, QTimer, QStringListModel
 from PyQt5.QtGui import QColor, QKeySequence, QFont, QFontInfo, QIcon
 from logging import getLogger
@@ -537,6 +537,16 @@ class RealtimeLogWidget(QWidget):
         self._filter_bar = FilterBar(self)
         self._filter_bar.on_filter = self._table.set_filter
 
+        self._max_log_rows = 300
+        self._log_sping_box_min_value = 50
+        self._log_sping_box_max_value = 1000
+
+        self._max_log_rows_spin_box = QSpinBox()
+        self._max_log_rows_spin_box.setRange(self._log_sping_box_min_value, self._log_sping_box_max_value)
+        self._max_log_rows_spin_box.setValue(self._max_log_rows)
+        self._max_log_rows_spin_box.setToolTip("Max log rows")
+        self._max_log_rows_spin_box.valueChanged.connect(self._on_max_log_rows_change)
+
         self._row_count = LabelWithIcon(get_icon('list'), '0', self)
         self._row_count.setToolTip('Row count')
 
@@ -561,6 +571,7 @@ class RealtimeLogWidget(QWidget):
         controls_layout.addLayout(self._custom_area_layout, 1)
         controls_layout.addStretch()
 
+        controls_layout.addWidget(self._max_log_rows_spin_box)
         controls_layout.addWidget(self._row_count)
 
         layout.addLayout(controls_layout)
@@ -574,6 +585,9 @@ class RealtimeLogWidget(QWidget):
         super(RealtimeLogWidget, self).keyPressEvent(qkeyevent)
         if qkeyevent.matches(QKeySequence.Find):
             self._search_bar.show()
+
+    def _on_max_log_rows_change(self):
+        self._max_log_rows = self._max_log_rows_spin_box.value()
 
     def _search(self, *args, **kwargs):
         self._pause.setChecked(True)
@@ -609,7 +623,7 @@ class RealtimeLogWidget(QWidget):
                     self._table.insertRow(row)
                     self._table.set_row(row, item)
                     do_scroll = True
-                    if row >= 500:
+                    if row >= self._max_log_rows:
                         rows = []
                         for i in range(row):
                             rows.append(self._table.get_row_as_string(i) + '\n')
