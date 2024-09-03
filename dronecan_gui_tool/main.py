@@ -62,9 +62,9 @@ if multiprocessing.get_start_method(True) != 'spawn':
 #
 import dronecan
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QSplitter, QAction
-from PyQt5.QtGui import QKeySequence, QDesktopServices
-from PyQt5.QtCore import QTimer, Qt, QUrl
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QSplitter
+from PyQt6.QtGui import QKeySequence, QDesktopServices, QAction
+from PyQt6.QtCore import QTimer, Qt, QUrl
 
 from .version import __version__
 from .setup_window import run_setup_window

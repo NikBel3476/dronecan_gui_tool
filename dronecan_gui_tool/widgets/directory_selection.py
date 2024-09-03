@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QGroupBox, QLineEdit, QCompleter, QPushButton, QDirModel, QHBoxLayout, QFileDialog
-from PyQt5.QtCore import Qt
+from PyQt6.QtWidgets import QGroupBox, QLineEdit, QCompleter, QPushButton, QHBoxLayout, QFileDialog
+from PyQt6.QtGui import QFileSystemModel
+from PyQt6.QtCore import Qt
 
 class DirectorySelectionWidget(QGroupBox):
     def __init__(self, parent, label, path=None, directory_only=False):
@@ -10,7 +11,7 @@ class DirectorySelectionWidget(QGroupBox):
 
         dir_text_completer = QCompleter(self)
         dir_text_completer.setCaseSensitivity(Qt.CaseSensitive)
-        dir_text_completer.setModel(QDirModel(self))
+        dir_text_completer.setModel(QFileSystemModel(self))
         dir_textbox.setCompleter(dir_text_completer)
 
         def on_edit():

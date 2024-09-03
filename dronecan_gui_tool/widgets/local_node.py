@@ -7,8 +7,8 @@
 #
 
 import dronecan
-from PyQt5.QtWidgets import QGroupBox, QLabel, QSpinBox, QHBoxLayout, QCheckBox
-from PyQt5.QtCore import QTimer
+from PyQt6.QtWidgets import QGroupBox, QLabel, QSpinBox, QHBoxLayout, QCheckBox
+from PyQt6.QtCore import QTimer, Qt
 from logging import getLogger
 from . import make_icon_button, flash
 
@@ -148,7 +148,7 @@ class AdapterSettingsWidget(QGroupBox):
             self._filtering.setTristate(False)
             filter_list = node.can_driver.get_filter_list()
             if filter_list is not None and len(filter_list) > 0:
-                self._filtering.setCheckState(2)
+                self._filtering.setCheckState(Qt.CheckState.Checked)
             self._filtering.stateChanged.connect(self.change_filtering)
 
         layout = QHBoxLayout(self)

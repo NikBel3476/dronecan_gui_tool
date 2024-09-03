@@ -12,11 +12,11 @@ import time
 import threading
 import copy
 from .widgets import show_error, get_monospace_font, directory_selection
-from PyQt5.QtWidgets import QComboBox, QCompleter, QDialog, QDirModel, QFileDialog, QGroupBox, QHBoxLayout, QLabel, \
-    QLineEdit, QPushButton, QSpinBox, QVBoxLayout, QGridLayout, QCheckBox
-from qtwidgets import PasswordEdit
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QIntValidator
+from PyQt6.QtWidgets import QComboBox, QCompleter, QDialog, QGroupBox, QLabel, \
+    QPushButton, QSpinBox, QVBoxLayout, QGridLayout, QCheckBox
+from .widgets.password_edit import PasswordEdit
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QIntValidator
 from logging import getLogger
 from collections import OrderedDict
 from itertools import count
@@ -93,7 +93,7 @@ def list_ifaces():
         return out
     else:
         # Windows, Mac, whatever
-        from PyQt5 import QtSerialPort
+        from PyQt6 import QtSerialPort
 
         out = OrderedDict()
         for port in QtSerialPort.QSerialPortInfo.availablePorts():

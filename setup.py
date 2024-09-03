@@ -49,14 +49,14 @@ args = dict(
         'easywebdav>=1.2',
         'pymonocypher',
         'numpy',
-        'pyqt5',
+        'PyQt6',
+        'pyqt6',
         'traitlets',
         'jupyter-client',
         'ipykernel',
         'pygments',
         'qtpy',
-        'pyqtgraph',
-        'qtwidgets'
+        'pyqtgraph'
     ],
     # We can't use "scripts" here, because generated shims don't work with multiprocessing pickler.
     entry_points={
@@ -135,7 +135,7 @@ if ('bdist_msi' in sys.argv) or ('build_exe' in sys.argv):
 
     import qtawesome
     import qtconsole
-    import PyQt5
+    import PyQt6
     import zmq
     import pygments
     import IPython
@@ -161,7 +161,7 @@ if ('bdist_msi' in sys.argv) or ('build_exe' in sys.argv):
             'include_files': [
                 PACKAGE_NAME,
                 # These packages don't work properly when packed in .zip, so here we have another bunch of ugly hacks
-                os.path.join(unpacked_eggs_dir, os.path.dirname(PyQt5.__file__)),
+                os.path.join(unpacked_eggs_dir, os.path.dirname(PyQt6.__file__)),
                 os.path.join(unpacked_eggs_dir, os.path.dirname(qtawesome.__file__)),
                 os.path.join(unpacked_eggs_dir, os.path.dirname(qtconsole.__file__)),
                 os.path.join(unpacked_eggs_dir, os.path.dirname(zmq.__file__)),
