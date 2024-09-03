@@ -39,7 +39,7 @@ but it may come in handy when using the embedded IPython console.
 
 ```bash
 sudo apt-get install -y python3-pip python3-setuptools python3-wheel
-sudo apt-get install -y python3-numpy python3-PyQt6 python3-PyQt6.qtsvg git-core
+sudo apt-get install -y python3-numpy python3-pyqt6 python3-pyqt6.qtsvg git-core
 sudo pip3 install git+https://github.com/DroneCAN/gui_tool@master
 ```
 
@@ -100,7 +100,7 @@ If you're prompted to install Command Line Developer Tools, agree.
 
 ```bash
 sudo port selfupdate
-sudo port install curl-ca-bundle py35-pip py35-PyQt6 py35-numpy
+sudo port install curl-ca-bundle py35-pip py35-pyqt6 py35-numpy
 sudo python3.5 -m pip install git+https://github.com/DroneCAN/gui_tool@master
 ```
 
