@@ -538,11 +538,11 @@ class RealtimeLogWidget(QWidget):
         self._filter_bar.on_filter = self._table.set_filter
 
         self._max_log_rows = 300
-        self._log_sping_box_min_value = 50
-        self._log_sping_box_max_value = 1000
+        self._log_spin_box_min_value = 50
+        self._log_spin_box_max_value = 1000
 
         self._max_log_rows_spin_box = QSpinBox()
-        self._max_log_rows_spin_box.setRange(self._log_sping_box_min_value, self._log_sping_box_max_value)
+        self._max_log_rows_spin_box.setRange(self._log_spin_box_min_value, self._log_spin_box_max_value)
         self._max_log_rows_spin_box.setValue(self._max_log_rows)
         self._max_log_rows_spin_box.setToolTip("Max log rows")
         self._max_log_rows_spin_box.valueChanged.connect(self._on_max_log_rows_change)
