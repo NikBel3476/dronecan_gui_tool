@@ -13,7 +13,7 @@ import queue
 from PyQt6.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView, QApplication, QWidget, \
     QComboBox, QCompleter, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox, QSpinBox
 from PyQt6.QtCore import Qt, QTimer, QStringListModel
-from PyQt6.QtGui import QColor, QKeySequence, QFont, QFontInfo, QIcon
+from PyQt6.QtGui import QColor, QKeySequence, QFont, QFontInfo, QIcon, QColorConstants
 from logging import getLogger
 import qtawesome
 from functools import partial
@@ -176,6 +176,7 @@ class BasicTable(QTableWidget):
             w = QTableWidgetItem(str(value))
             if color is not None:
                 w.setBackground(color)
+                w.setForeground(QColorConstants.Black)
             w.setTextAlignment(Qt.AlignVCenter | Qt.AlignLeft)
             w.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
             self.setItem(row, col, w)
