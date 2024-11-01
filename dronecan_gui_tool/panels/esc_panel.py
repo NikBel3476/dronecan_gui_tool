@@ -25,8 +25,10 @@ _singleton = None
 
 
 class PercentSlider(QWidget):
-    def __init__(self, parent):
+    def __init__(self, esc_index, parent):
         super(PercentSlider, self).__init__(parent)
+
+        self._index = esc_index
 
         self._slider = QSlider(Qt.Vertical, self)
         self._slider.setMinimum(-100)
@@ -44,27 +46,55 @@ class PercentSlider(QWidget):
 
         self._zero_button = make_icon_button('hand-stop-o', 'Zero setpoint', self, on_clicked=self.zero)
 
-        layout = QVBoxLayout(self)
-        sub_layout = QHBoxLayout(self)
-        sub_layout.addStretch()
-        sub_layout.addWidget(self._slider)
-        sub_layout.addStretch()
-        layout.addLayout(sub_layout)
-        layout.addWidget(self._spinbox)
-        layout.addWidget(self._zero_button)
+        self._index_label = QLabel(f'Index: {self._index}', self)
+        self._error_count_label = QLabel('Err: NC', self)
+        self._voltage_label = QLabel('Volt: NC', self)
+        self._current_label = QLabel('Curr: NC', self)
+        self._temperature_label = QLabel('Temp: NC', self)
+        self._rpm_label = QLabel('RPM: NC', self)
+        self._power_rating_pct_label = QLabel('RAT: NC', self)
+
+        layout = QHBoxLayout(self)
+
+        status_layout = QVBoxLayout(self)
+        status_layout.addWidget(self._index_label)
+        status_layout.addWidget(self._error_count_label)
+        status_layout.addWidget(self._voltage_label)
+        status_layout.addWidget(self._current_label)
+        status_layout.addWidget(self._temperature_label)
+        status_layout.addWidget(self._rpm_label)
+        status_layout.addWidget(self._power_rating_pct_label)
+        status_layout.addStretch()
+        status_layout.addWidget(self._spinbox)
+        status_layout.addWidget(self._zero_button)
+
+        layout.addLayout(status_layout)
+        layout.addWidget(self._slider)
+
         self.setLayout(layout)
 
-        self.setMinimumHeight(400)
+        self.setMinimumHeight(300)
 
     def zero(self):
         self._slider.setValue(0)
 
     def get_value(self):
         return self._slider.value()
+    
+    def update_status(self, msg):
+        status = msg.message
+        if status.esc_index == self._index:
+            self._error_count_label.setText(f'Err: {status.error_count}')
+            self._voltage_label.setText(f'Volt: {status.voltage:.1f} V')
+            self._current_label.setText(f'Curr: {status.current:.1f} A')
+            temperature_celsius = status.temperature - 273.15
+            self._temperature_label.setText(f'Temp: {temperature_celsius:.1f} °C')
+            self._rpm_label.setText(f'RPM: {status.rpm}')
+            self._power_rating_pct_label.setText(f'RAT: {status.power_rating_pct} %')
 
 
 class ESCPanel(QDialog):
-    DEFAULT_INTERVAL = 0.1
+    DEFAULT_RATE = 10
 
     CMD_BIT_LENGTH = dronecan.get_dronecan_data_type(dronecan.uavcan.equipment.esc.RawCommand().cmd).value_type.bitlen
     CMD_MAX = 2 ** (CMD_BIT_LENGTH - 1) - 1
@@ -77,7 +107,7 @@ class ESCPanel(QDialog):
 
         self._node = node
 
-        self._sliders = [PercentSlider(self) for _ in range(4)]
+        self._sliders = [PercentSlider(index, self) for index in range(4)]
 
         self._num_sliders = QSpinBox(self)
         self._num_sliders.setMinimum(len(self._sliders))
@@ -88,13 +118,13 @@ class ESCPanel(QDialog):
         self._safety_enable = QCheckBox(self)
         self._arming_enable = QCheckBox(self)
 
-        self._bcast_interval = QDoubleSpinBox(self)
-        self._bcast_interval.setMinimum(0.01)
-        self._bcast_interval.setMaximum(1.0)
-        self._bcast_interval.setSingleStep(0.1)
-        self._bcast_interval.setValue(self.DEFAULT_INTERVAL)
-        self._bcast_interval.valueChanged.connect(
-            lambda: self._bcast_timer.setInterval(self._bcast_interval.value() * 1e3))
+        self._bcast_rate = QSpinBox(self)
+        self._bcast_rate.setMinimum(1)
+        self._bcast_rate.setMaximum(500)
+        self._bcast_rate.setSingleStep(1)
+        self._bcast_rate.setValue(self.DEFAULT_RATE)
+        self._bcast_rate.valueChanged.connect(
+            lambda: self._bcast_timer.setInterval(int(1e3 / self._bcast_rate.value())))
 
         self._stop_all = make_icon_button('hand-stop-o', 'Zero all channels', self, text='Stop All',
                                           on_clicked=self._do_stop_all)
@@ -109,7 +139,7 @@ class ESCPanel(QDialog):
         self._msg_viewer.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
 
         self._bcast_timer = QTimer(self)
-        self._bcast_timer.start(int(self.DEFAULT_INTERVAL * 1e3))
+        self._bcast_timer.start(int(1e3 / self.DEFAULT_RATE))
         self._bcast_timer.timeout.connect(self._do_broadcast)
 
         layout = QVBoxLayout(self)
@@ -128,9 +158,9 @@ class ESCPanel(QDialog):
         controls_layout.addWidget(self._safety_enable)
         controls_layout.addWidget(QLabel('SendArming:', self))
         controls_layout.addWidget(self._arming_enable)
-        controls_layout.addWidget(QLabel('Broadcast interval:', self))
-        controls_layout.addWidget(self._bcast_interval)
-        controls_layout.addWidget(QLabel('sec', self))
+        controls_layout.addWidget(QLabel('Broadcast Rate:', self))
+        controls_layout.addWidget(self._bcast_rate)
+        controls_layout.addWidget(QLabel('Hz', self))
         controls_layout.addStretch()
         controls_layout.addWidget(self._pause)
         layout.addLayout(controls_layout)
@@ -140,6 +170,13 @@ class ESCPanel(QDialog):
 
         self.setLayout(layout)
         self.resize(self.minimumWidth(), self.minimumHeight())
+
+        self._node.add_handler(dronecan.uavcan.equipment.esc.Status, self._on_esc_status)
+    
+    def _on_esc_status(self, msg):
+        if msg.message.esc_index < len(self._sliders):
+            sl = self._sliders[msg.message.esc_index] 
+            sl.update_status(msg) 
 
     def _do_broadcast(self):
         try:
@@ -180,7 +217,7 @@ class ESCPanel(QDialog):
             removee.deleteLater()
 
         while len(self._sliders) < num_sliders:
-            new = PercentSlider(self)
+            new = PercentSlider(len(self._sliders), self)
             self._slider_layout.addWidget(new)
             self._sliders.append(new)
 
