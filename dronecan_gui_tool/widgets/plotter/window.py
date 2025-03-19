@@ -61,7 +61,7 @@ class PlotterWindow(QMainWindow):
 
         control_menu.addSeparator()
 
-        self._reset_time_action = QAction(get_icon('history'), '&Reset', self)
+        self._reset_time_action = QAction(get_icon('clock-rotate-left'), '&Reset', self)
         self._reset_time_action.setStatusTip('Base time will be reset; all plots will be reset')
         self._reset_time_action.setShortcut(QKeySequence('Ctrl+Shift+R'))
         self._reset_time_action.triggered.connect(self._do_reset)

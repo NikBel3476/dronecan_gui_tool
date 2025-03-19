@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
         #
         # File menu
         #
-        quit_action = QAction(get_icon('sign-out'), '&Quit', self)
+        quit_action = QAction(get_icon('right-from-bracket'), '&Quit', self)
         quit_action.setShortcut(QKeySequence('Ctrl+Shift+Q'))
         quit_action.triggered.connect(self.close)
 
@@ -158,13 +158,13 @@ class MainWindow(QMainWindow):
         show_console_action.setStatusTip('Open interactive console window')
         show_console_action.triggered.connect(self._show_console_window)
 
-        new_subscriber_action = QAction(get_icon('newspaper-o'), '&Subscriber', self)
+        new_subscriber_action = QAction(get_icon('newspaper'), '&Subscriber', self)
         new_subscriber_action.setShortcut(QKeySequence('Ctrl+Shift+S'))
         new_subscriber_action.setStatusTip('Open subscription tool')
         new_subscriber_action.triggered.connect(
             lambda: SubscriberWindow.spawn(self, self._node, self._active_data_type_detector))
 
-        new_plotter_action = QAction(get_icon('area-chart'), '&Plotter', self)
+        new_plotter_action = QAction(get_icon('chart-area'), '&Plotter', self)
         new_plotter_action.setShortcut(QKeySequence('Ctrl+Shift+P'))
         new_plotter_action.setStatusTip('Open new graph plotter window')
         new_plotter_action.triggered.connect(self._plotter_manager.spawn_plotter)
@@ -202,7 +202,7 @@ class MainWindow(QMainWindow):
         dronecan_website_action = QAction(get_icon('globe'), 'Open DroneCAN &Website', self)
         dronecan_website_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('http://dronecan.org')))
 
-        show_log_directory_action = QAction(get_icon('pencil-square-o'), 'Open &Log Directory', self)
+        show_log_directory_action = QAction(get_icon('pen-to-square'), 'Open &Log Directory', self)
         show_log_directory_action.triggered.connect(
             lambda: QDesktopServices.openUrl(QUrl.fromLocalFile(os.path.dirname(log_file.name))))
 

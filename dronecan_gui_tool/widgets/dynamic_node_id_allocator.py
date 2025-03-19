@@ -59,7 +59,7 @@ class DynamicNodeIDAllocatorWidget(QGroupBox):
         self._database_file.addItem(self._database_file.currentText())
         self._database_file.on_commit = self._on_start_stop_button
 
-        self._select_database_file = make_icon_button('folder-open-o', 'Open allocation table file', self,
+        self._select_database_file = make_icon_button('folder-open', 'Open allocation table file', self,
                                                       on_clicked=self._on_select_database_file)
 
         db_file_completer = QCompleter()

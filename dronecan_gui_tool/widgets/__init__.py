@@ -336,7 +336,7 @@ class SearchBar(QWidget):
         self._default_search_direction = 'down'
 
         self.show_search_bar_button = \
-            make_icon_button('search', 'Show search bar', self, checkable=True,
+            make_icon_button('magnifying-glass', 'Show search bar', self, checkable=True,
                              on_clicked=lambda: self.setVisible(self.show_search_bar_button.isChecked()))
 
         self._bar = SearchBarComboBox(self)
@@ -522,12 +522,12 @@ class RealtimeLogWidget(QWidget):
         self._table = BasicTable(self, **table_options)
         self._table.selectionModel().selectionChanged.connect(self._call_on_selection_changed)
 
-        self._clear_button = make_icon_button('trash-o', 'Clear', self, on_clicked=self._clear)
+        self._clear_button = make_icon_button('trash', 'Clear', self, on_clicked=self._clear)
 
         self._pause = make_icon_button('pause', 'Pause updates; data received while paused will not be lost', self,
                                        checkable=True)
 
-        self._start_button = make_icon_button('video-camera', 'Start/stop capturing', self,
+        self._start_button = make_icon_button('video', 'Start/stop capturing', self,
                                               checkable=True,
                                               checked=started_by_default,
                                               on_clicked=self._on_start_button_clicked)
@@ -669,7 +669,7 @@ class RealtimeLogWidget(QWidget):
 
 
 def get_icon(name):
-    return qtawesome.icon('fa.' + name)
+    return qtawesome.icon('fa6s.' + name)
 
 
 def make_icon_button(icon_name, tool_tip, parent, checkable=False, checked=False, on_clicked=None, text=''):
