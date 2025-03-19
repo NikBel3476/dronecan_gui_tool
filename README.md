@@ -120,6 +120,13 @@ First, deploy the new version to PyPI. In order to do that, perform the followin
 Then, build a Windows MSI package using the instructions above, and upload the resulting MSI to
 the distribution server.
 
+### Dependecies
+
+`python -m pip install numpy pyqt6 dronecan qtawesome pyqtgraph pyyaml qtconsole pyserial`
+
+### Run module
+`python -m dronecan_gui_tool`
+
 ### Code style
 
 Please follow the existing code styles .
