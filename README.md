@@ -107,6 +107,14 @@ sudo python3.5 -m pip install git+https://github.com/DroneCAN/gui_tool@master
 We would like to provide prebuilt application packages instead of the mess above.
 Contributions adding this capability would be welcome.
 
+### Installing inside virtualenv
+
+```sh
+python -m venv venv
+python -m pip install git+https://github.com/NikBel3476/dronecan_gui_tool@master
+dronecan_gui_tool
+```
+
 ## Development
 
 ### Releasing new version
