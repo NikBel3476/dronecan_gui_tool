@@ -128,7 +128,7 @@ First, deploy the new version to PyPI. In order to do that, perform the followin
 Then, build a Windows MSI package using the instructions above, and upload the resulting MSI to
 the distribution server.
 
-### Dependencies
+### Install dependencies
 
 `python -m pip install numpy pyqt6 dronecan qtawesome pyqtgraph pyyaml qtconsole pyserial`
 
