@@ -59,7 +59,7 @@ class StateWidget(QWidget):
 
         self._table = StateTable(self)
 
-        self._reload_button = make_icon_button('refresh', 'Reload state information from the adapter', self,
+        self._reload_button = make_icon_button('arrows-rotate', 'Reload state information from the adapter', self,
                                                on_clicked=self._do_reload, text='Reload')
 
         self._auto_reload_checkbox = QCheckBox('Auto reload every [sec]:', self)
@@ -281,7 +281,7 @@ class ConfigWidget(QWidget):
 
         self._have_unsaved_changes = False
 
-        self._fetch_button = make_icon_button('refresh',
+        self._fetch_button = make_icon_button('arrows-rotate',
                                               'Fetch configuration from the adapter',
                                               self, on_clicked=self._do_fetch, text='Fetch')
 

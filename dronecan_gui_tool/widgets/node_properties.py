@@ -449,7 +449,7 @@ class ConfigParamEditWindow(QDialog):
             layout.addWidget(QLabel('Melody', self), layout.rowCount(), 0)
             layout.addWidget(self._value_widget, layout.rowCount() - 1, 1)
 
-        fetch_button = make_icon_button('refresh', 'Read parameter from the node', self, text='Fetch',
+        fetch_button = make_icon_button('arrows-rotate', 'Read parameter from the node', self, text='Fetch',
                                         on_clicked=self._do_fetch)
         set_default_button = make_icon_button('fire-extinguisher', 'Restore default value', self, text='Restore',
                                               on_clicked=self._restore_default)
@@ -580,7 +580,7 @@ class ConfigParams(QGroupBox):
         self._target_node_id = target_node_id
         self._retries = 0
 
-        self._read_all_button = make_icon_button('refresh', 'Fetch all config parameters from the node', self,
+        self._read_all_button = make_icon_button('arrows-rotate', 'Fetch all config parameters from the node', self,
                                                  text='Fetch All', on_clicked=self._do_reload)
 
         opcodes = dronecan.uavcan.protocol.param.ExecuteOpcode.Request()

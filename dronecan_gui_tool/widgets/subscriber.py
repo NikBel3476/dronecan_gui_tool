@@ -136,11 +136,11 @@ class SubscriberWindow(QDialog):
         self._filter_bar = FilterBar(self)
         self._filter_bar.on_filter = self._install_filter
 
-        self._start_stop_button = make_icon_button('video-camera', 'Begin subscription', self, checkable=True,
+        self._start_stop_button = make_icon_button('video', 'Begin subscription', self, checkable=True,
                                                    on_clicked=self._toggle_start_stop)
         self._pause_button = make_icon_button('pause', 'Pause updates, non-displayed messages will be queued in memory',
                                               self, checkable=True)
-        self._clear_button = make_icon_button('trash-o', 'Clear output and reset stat counters', self,
+        self._clear_button = make_icon_button('trash-can', 'Clear output and reset stat counters', self,
                                               on_clicked=self._do_clear)
 
         self._show_all_message_types = make_icon_button('puzzle-piece',

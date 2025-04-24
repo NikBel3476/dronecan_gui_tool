@@ -302,7 +302,7 @@ class ExtractorWidget(QWidget):
         self._update_timer.timeout.connect(self._update)
         self._update_timer.start(200)
 
-        self._delete_button = make_icon_button('trash-o', 'Remove this extractor', self, on_clicked=self._do_remove)
+        self._delete_button = make_icon_button('trash-can', 'Remove this extractor', self, on_clicked=self._do_remove)
 
         self._color_button = make_icon_button('paint-brush', 'Change plot color', self, on_clicked=self._change_color)
         self._color_button.setFlat(True)
